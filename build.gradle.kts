@@ -1,6 +1,5 @@
 plugins {
     java
-    id("io.papermc.paperweight.userdev") version "1.7.7"
 }
 
 group = "com.example.doublejump"
@@ -17,7 +16,7 @@ repositories {
 }
 
 dependencies {
-    paperweight.paperApi("1.21.1-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT")
 }
 
 tasks {
