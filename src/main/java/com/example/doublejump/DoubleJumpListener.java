@@ -42,7 +42,7 @@ public class DoubleJumpListener implements Listener {
 
         // Apply upward velocity for the double jump
         Vector velocity = player.getVelocity();
-        velocity.setY(0.8);
+        velocity.setY(0.42);
         // Preserve horizontal momentum
         player.setVelocity(velocity);
     }
