@@ -18,10 +18,9 @@ public class DoubleJumpListener implements Listener {
     private final Map<Player, Boolean> canDoubleJump = new HashMap<>();
 
     public DoubleJumpListener(DoubleJumpPlugin plugin) {
-        // Run a repeating task every tick to ensure allowFlight stays true
-        // for eligible players. This fixes issues where the server's movement
-        // handler resets allowFlight after our event handlers run,
-        // especially when falling from high places or sprinting.
+        // Run a repeating task every tick as a fallback to ensure allowFlight
+        // stays true for eligible players. This handles edge cases where
+        // PlayerMoveEvent may not fire (e.g. player frozen or stopped mid-air).
         plugin.getServer().getScheduler().runTaskTimer(plugin, () -> {
             for (Player player : plugin.getServer().getOnlinePlayers()) {
                 if (player.getGameMode() == GameMode.CREATIVE || player.getGameMode() == GameMode.SPECTATOR) {
@@ -94,6 +93,20 @@ public class DoubleJumpListener implements Listener {
         // Reset double jump when player lands on ground
         if (player.isOnGround() && !player.isFlying()) {
             canDoubleJump.put(player, true);
+            player.setAllowFlight(true);
+            return;
+        }
+
+        // CRITICAL: Keep allowFlight = true while player is in the air and
+        // eligible for double jump. This runs synchronously during movement
+        // packet processing, which is more reliable than the scheduled task
+        // because it ensures allowFlight is set BEFORE the server processes
+        // the flight ability packet from the client.
+        //
+        // Without this, the server's movement handler may reset allowFlight
+        // after the scheduled task runs, causing the PlayerToggleFlightEvent
+        // to not fire when the player presses jump while falling.
+        if (!player.isFlying() && canDoubleJump.getOrDefault(player, false)) {
             player.setAllowFlight(true);
         }
     }
