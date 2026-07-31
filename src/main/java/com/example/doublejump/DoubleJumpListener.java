@@ -17,6 +17,24 @@ public class DoubleJumpListener implements Listener {
 
     private final Map<Player, Boolean> canDoubleJump = new HashMap<>();
 
+    public DoubleJumpListener(DoubleJumpPlugin plugin) {
+        // Run a repeating task every tick to ensure allowFlight stays true
+        // for eligible players. This fixes issues where the server's movement
+        // handler resets allowFlight after our event handlers run,
+        // especially when falling from high places or sprinting.
+        plugin.getServer().getScheduler().runTaskTimer(plugin, () -> {
+            for (Player player : plugin.getServer().getOnlinePlayers()) {
+                if (player.getGameMode() == GameMode.CREATIVE || player.getGameMode() == GameMode.SPECTATOR) {
+                    continue;
+                }
+                if (!player.isOnGround() && !player.isFlying()
+                        && canDoubleJump.getOrDefault(player, false)) {
+                    player.setAllowFlight(true);
+                }
+            }
+        }, 1L, 1L);
+    }
+
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
@@ -76,13 +94,6 @@ public class DoubleJumpListener implements Listener {
         // Reset double jump when player lands on ground
         if (player.isOnGround() && !player.isFlying()) {
             canDoubleJump.put(player, true);
-            player.setAllowFlight(true);
-            return;
-        }
-
-        // Keep allowFlight=true while in the air and can still double jump,
-        // to ensure PlayerToggleFlightEvent fires reliably even when sprinting
-        if (!player.isOnGround() && canDoubleJump.getOrDefault(player, false)) {
             player.setAllowFlight(true);
         }
     }

@@ -6,7 +6,7 @@ public class DoubleJumpPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        getServer().getPluginManager().registerEvents(new DoubleJumpListener(), this);
+        getServer().getPluginManager().registerEvents(new DoubleJumpListener(this), this);
         getLogger().info("DoubleJump plugin has been enabled!");
     }
 
