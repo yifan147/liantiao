@@ -1,0 +1,5 @@
+name: ${name}
+version: ${version}
+description: ${description}
+main: com.example.doublejump.DoubleJumpPlugin
+api-version: "1.21"
