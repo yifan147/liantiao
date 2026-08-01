@@ -1,24 +1,24 @@
-# DoubleJump
+# 二段跳 DoubleJump
 
-A Paper 1.21.1 server plugin that adds double jump functionality.
+一个 Paper 1.21.1 服务端插件，为玩家添加二段跳功能。
 
-## Features
+## 功能
 
-- Players can perform a second jump while in mid-air
-- Double jump is disabled when sneaking (shift)
-- Resets automatically when landing on the ground
-- Not available in Creative or Spectator mode
+- 玩家可以在空中进行第二次跳跃（二段跳）
+- 蹲下（Shift）时无法触发二段跳
+- 落地后自动重置二段跳状态
+- 创造模式/旁观者模式下不生效
 
-## Usage
+## 使用方法
 
-1. Drop the built `DoubleJump-1.0.0.jar` into your server's `plugins/` folder
-2. Restart the server
-3. Players can double jump by pressing the jump key again while falling
+1. 将构建好的 `DoubleJump-1.0.0.jar` 放入服务器的 `plugins/` 文件夹
+2. 重启服务器
+3. 玩家在跳起后，空中再次按跳跃键即可触发二段跳
 
-## Building
+## 构建
 
 ```bash
 ./gradlew build
 ```
 
-The built jar will be at `build/libs/DoubleJump-1.0.0.jar`.
+构建后的 jar 文件位于 `build/libs/DoubleJump-1.0.0.jar`。
